@@ -1,0 +1,6 @@
+interface:
+  display_name: "Font Image Text Replace"
+  short_description: "上传图片后仅替换字体并复刻原文字位置字号字效"
+  default_prompt: "Use $font-image-text-replace-01 to replace the font in an uploaded image while preserving copy, layout, size, and effects."
+policy:
+  allow_implicit_invocation: true

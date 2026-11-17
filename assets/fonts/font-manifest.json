@@ -1,0 +1,30 @@
+{
+  "schema_version": 2,
+  "pack_name": "font-image-text-replace-01-lite-fonts",
+  "font_count": 21,
+  "selection_policy": "Choose primarily by glyph-shape similarity: stroke weight, character width, structure, center of gravity, corner treatment, writing rhythm, and visual density. Categories and example uses are non-exclusive navigation hints; fonts may be mixed across roles and scenes in the same image.",
+  "license_notice": "Bundling does not grant a font license. Use and redistribute these files only within the authorization held by the package owner or recipient.",
+  "fonts": [
+    {"id":"zihun-yingzhi-w3","display_name":"字魂荧智 W3","file":"zihun-yingzhi-w3.ttf","photoshop_font_name":"ZihunYingzhi_T-W3","shape_group":"clean-sans","shape_traits":["中细笔画","中宫稳定","高可读性"],"example_uses":["正文","小字","说明文字"]},
+    {"id":"zihun-yingzhi-w6","display_name":"字魂荧智 W6","file":"zihun-yingzhi-w6.ttf","photoshop_font_name":"ZihunYingzhi_T-W6","shape_group":"clean-sans","shape_traits":["较粗笔画","结构规整","识别度高"],"example_uses":["标题","小标题","商务海报"]},
+    {"id":"zihun-heizhengti","display_name":"字魂黑正体","file":"zihun-heizhengti.ttf","photoshop_font_name":"zihunheizhengti","shape_group":"heavy-sans","shape_traits":["方正","粗重","紧凑"],"example_uses":["通用标题","产品名","信息标题"]},
+    {"id":"zihun-haimati","display_name":"字魂海马体","file":"zihun-haimati.ttf","photoshop_font_name":"zihunhaimatiziti","shape_group":"handwriting","shape_traits":["手写感","灵动","亲和"],"example_uses":["手写标题","文艺","亲和表达"]},
+    {"id":"zihun-budingti","display_name":"字魂布丁体","file":"zihun-budingti.ttf","photoshop_font_name":"zihun27hao-budingti-Regular","shape_group":"rounded-display","shape_traits":["圆润","饱满","趣味"],"example_uses":["可爱标题","亲子","甜品"]},
+    {"id":"zihun-xiarishigeti","display_name":"字魂夏日诗歌体","file":"zihun-xiarishigeti.ttf","photoshop_font_name":"zihunxiarishigeti","shape_group":"handwriting","shape_traits":["手写感","舒展","轻松"],"example_uses":["生活方式","情绪文案","轻松标题"]},
+    {"id":"zihun-zhaotieti","display_name":"字魂招贴体","file":"zihun-zhaotieti.ttf","photoshop_font_name":"zihunzhaotieti","shape_group":"poster-display","shape_traits":["粗重","醒目","招贴感"],"example_uses":["活动标题","促销","招贴海报"]},
+    {"id":"zihun-guangzixinpianti","display_name":"字魂光子芯片体","file":"zihun-guangzixinpianti.ttf","photoshop_font_name":"zihunguangzixinpianti","shape_group":"geometric-display","shape_traits":["几何","硬朗","切角"],"example_uses":["科技","数码","参数标题"]},
+    {"id":"zihun-bailianti-heavy","display_name":"字魂百炼体 Heavy","file":"zihun-bailianti-heavy.ttf","photoshop_font_name":"zihunbailianti-Heavy","shape_group":"heavy-display","shape_traits":["超粗","高黑度","力量感"],"example_uses":["粗重标题","运动","强视觉标题"]},
+    {"id":"zihun-bairunti","display_name":"字魂白润体","file":"zihun-bairunti.ttf","photoshop_font_name":"zihunbairunti","shape_group":"rounded-sans","shape_traits":["圆角","柔和","均衡"],"example_uses":["正文","生活方式","辅助标题"]},
+    {"id":"zihun-evolution-heavy","display_name":"字魂正酷超级进化体 Heavy","file":"zihun-evolution-heavy.ttf","photoshop_font_name":"ZHZKCJJHT-Heavy","shape_group":"dynamic-display","shape_traits":["粗重","切角","动势"],"example_uses":["汽车","游戏","竞技标题"]},
+    {"id":"zihun-speed-heavy","display_name":"字魂正酷超级速度体 Heavy","file":"zihun-speed-heavy.ttf","photoshop_font_name":"ZHZKCJSDT-Heavy","shape_group":"dynamic-display","shape_traits":["斜势","锐利","速度感"],"example_uses":["速度主题","汽车","运动标题"]},
+    {"id":"zihun-fangfangxianfengti","display_name":"字魂方方先锋体","file":"zihun-fangfangxianfengti.ttf","photoshop_font_name":"ZHFFXFT","shape_group":"geometric-display","shape_traits":["方形骨架","规整","现代"],"example_uses":["几何标题","数字信息","现代版式"]},
+    {"id":"zihun-zhengkuchaojihei","display_name":"字魂正酷超级黑","file":"zihun-zhengkuchaojihei.ttf","photoshop_font_name":"zihun143-zhengkuchaojihei","shape_group":"heavy-sans","shape_traits":["超粗黑体","紧凑","高冲击力"],"example_uses":["大标题","价格数字","强视觉信息"]},
+    {"id":"zihun-longyinshoushu","display_name":"字魂龙吟手书","file":"zihun-longyinshoushu.ttf","photoshop_font_name":"zihunlongyinshoushu","shape_group":"expressive-handwriting","shape_traits":["手书","飞白","力量感"],"example_uses":["国风标题","动作标题","情绪表达"]},
+    {"id":"zihun-guochaoshoushu","display_name":"字魂国潮手书","file":"zihun-guochaoshoushu.ttf","photoshop_font_name":"zihun43hao-guochaoshoushu","shape_group":"expressive-handwriting","shape_traits":["手书","粗细变化","潮流感"],"example_uses":["国潮标题","品牌活动","个性文案"]},
+    {"id":"zihun-ruiyihei","display_name":"字魂锐艺黑","file":"zihun-ruiyihei.ttf","photoshop_font_name":"zihun154hao-ruiyihei","shape_group":"modern-sans","shape_traits":["锐角","现代","中高黑度"],"example_uses":["小标题","英文辅助","现代海报"]},
+    {"id":"zihun-baibianmoshuti","display_name":"字魂百变魔术体","file":"zihun-baibianmoshuti.ttf","photoshop_font_name":"zihunbaibianmoshuti","shape_group":"playful-display","shape_traits":["夸张","变化丰富","节奏强"],"example_uses":["趣味标题","综艺","节日活动"]},
+    {"id":"zihun-fangyuehei","display_name":"字魂方悦黑","file":"zihun-fangyuehei.ttf","photoshop_font_name":"zihunfangyuehei","shape_group":"modern-sans","shape_traits":["方正","简洁","中等黑度"],"example_uses":["产品标题","办公数码","现代标题"]},
+    {"id":"zihun-jingdianyahei","display_name":"字魂经典雅黑","file":"zihun-jingdianyahei.ttf","photoshop_font_name":"zihun35hao-jingdianyahei-Regular","shape_group":"clean-sans","shape_traits":["清晰","中性","适合小字号"],"example_uses":["小字说明","正文","商务信息"]},
+    {"id":"zihun-yuesong","display_name":"字魂阅宋","file":"zihun-yuesong.ttf","photoshop_font_name":"zihunyuesong_T","shape_group":"serif","shape_traits":["宋体骨架","横细竖粗","人文感"],"example_uses":["正文","文化标题","出版风格"]}
+  ]
+}

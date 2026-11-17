@@ -1,0 +1,8 @@
+The font files in this package are commercial font assets.
+
+Bundling these files does not grant a font license or permission to redistribute
+them. The package owner and each recipient must hold the authorization required
+for their intended use and distribution scope.
+
+Do not publish this package or its font files to a public repository, public
+download page, or third-party marketplace unless the relevant license permits it.
