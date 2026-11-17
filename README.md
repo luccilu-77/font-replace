@@ -314,7 +314,7 @@ font-image-text-replace-01/
 |   |-- examples/
 |   `-- fonts/
 |       |-- font-manifest.json
-|       `-- 20 font files
+|       `-- 21 font files
 |-- references/
 `-- scripts/
     |-- detect-environment.ps1
