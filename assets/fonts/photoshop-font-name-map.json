@@ -1,0 +1,527 @@
+{
+  "schema_version": 1,
+  "purpose": "Resolve version-dependent Photoshop/PostScript font names before creating text layers.",
+  "entries": [
+    {
+      "id": "zihun-yingzhi-w3",
+      "display_name": "字魂荧智 W3",
+      "file": "zihun-yingzhi-w3.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "字魂荧智(商用需授权) W3"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "ZihunYingzhi_T-W3",
+          "字魂荧智(商用需授权)W3"
+        ],
+        "postscript_name": [
+          "ZihunYingzhi_T-W3"
+        ]
+      },
+      "photoshop_candidates": [
+        "ZihunYingzhi_T-W3"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-yingzhi-w6",
+      "display_name": "字魂荧智 W6",
+      "file": "zihun-yingzhi-w6.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "字魂荧智(商用需授权) W6"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "ZihunYingzhi_T-W6",
+          "字魂荧智(商用需授权)W6"
+        ],
+        "postscript_name": [
+          "ZihunYingzhi_T-W6"
+        ]
+      },
+      "photoshop_candidates": [
+        "ZihunYingzhi_T-W6"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-heizhengti",
+      "display_name": "字魂黑正体",
+      "file": "zihun-heizhengti.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "zihunheizhengti",
+          "字魂黑正体"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "zihunheizhengti",
+          "字魂黑正体"
+        ],
+        "postscript_name": [
+          "zihunheizhengti"
+        ]
+      },
+      "photoshop_candidates": [
+        "zihunheizhengti"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-haimati",
+      "display_name": "字魂海马体",
+      "file": "zihun-haimati.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "zihunhaimatiziti",
+          "字魂海马体字体"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "zihunhaimatiziti",
+          "字魂海马体字体"
+        ],
+        "postscript_name": [
+          "zihunhaimatiziti"
+        ]
+      },
+      "photoshop_candidates": [
+        "zihunhaimatiziti"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-budingti",
+      "display_name": "字魂布丁体",
+      "file": "zihun-budingti.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "zihun27hao-budingti",
+          "字魂27号-布丁体"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "zihun27hao-budingti"
+        ],
+        "postscript_name": [
+          "zihun27hao-budingti"
+        ]
+      },
+      "photoshop_candidates": [
+        "zihun27hao-budingti-Regular",
+        "zihun27hao-budingti"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-xiarishigeti",
+      "display_name": "字魂夏日诗歌体",
+      "file": "zihun-xiarishigeti.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "zihunxiarishigeti",
+          "字魂夏日诗歌体"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "zihunxiarishigeti",
+          "字魂夏日诗歌体"
+        ],
+        "postscript_name": [
+          "zihunxiarishigeti"
+        ]
+      },
+      "photoshop_candidates": [
+        "zihunxiarishigeti"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-zhaotieti",
+      "display_name": "字魂招贴体",
+      "file": "zihun-zhaotieti.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "zihunzhaotieti",
+          "字魂招贴体"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "zihunzhaotieti",
+          "字魂招贴体"
+        ],
+        "postscript_name": [
+          "zihunzhaotieti"
+        ]
+      },
+      "photoshop_candidates": [
+        "zihunzhaotieti"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-guangzixinpianti",
+      "display_name": "字魂光子芯片体",
+      "file": "zihun-guangzixinpianti.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "zihunguangzixinpianti",
+          "字魂光子芯片体"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "zihunguangzixinpianti",
+          "字魂光子芯片体"
+        ],
+        "postscript_name": [
+          "zihunguangzixinpianti"
+        ]
+      },
+      "photoshop_candidates": [
+        "zihunguangzixinpianti"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-bailianti-heavy",
+      "display_name": "字魂百炼体 Heavy",
+      "file": "zihun-bailianti-heavy.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "zihunbailianti Heavy",
+          "字魂百炼体 重体"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "zihunbailianti Heavy",
+          "字魂百炼体 重体"
+        ],
+        "postscript_name": [
+          "zihunbailianti-Heavy"
+        ]
+      },
+      "photoshop_candidates": [
+        "zihunbailianti-Heavy"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-bairunti",
+      "display_name": "字魂白润体",
+      "file": "zihun-bairunti.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "zihunbairunti",
+          "字魂白润体"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "zihunbairunti",
+          "字魂白润体"
+        ],
+        "postscript_name": [
+          "zihunbairunti"
+        ]
+      },
+      "photoshop_candidates": [
+        "zihunbairunti"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-evolution-heavy",
+      "display_name": "字魂正酷超级进化体 Heavy",
+      "file": "zihun-evolution-heavy.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "ZHZKCJJHT Heavy",
+          "字魂正酷超级进化体 黑体"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "ZHZKCJJHT Heavy",
+          "字魂正酷超级进化体 黑体"
+        ],
+        "postscript_name": [
+          "ZHZKCJJHT-Heavy"
+        ]
+      },
+      "photoshop_candidates": [
+        "ZHZKCJJHT-Heavy"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-speed-heavy",
+      "display_name": "字魂正酷超级速度体 Heavy",
+      "file": "zihun-speed-heavy.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "ZHZKCJSDT Heavy",
+          "字魂正酷超级速度体 黑体"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "ZHZKCJSDT Heavy",
+          "字魂正酷超级速度体 黑体"
+        ],
+        "postscript_name": [
+          "ZHZKCJSDT-Heavy"
+        ]
+      },
+      "photoshop_candidates": [
+        "ZHZKCJSDT-Heavy"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-fangfangxianfengti",
+      "display_name": "字魂方方先锋体",
+      "file": "zihun-fangfangxianfengti.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "ZHFFXFT",
+          "字魂方方先锋体"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "ZHFFXFT",
+          "字魂方方先锋体"
+        ],
+        "postscript_name": [
+          "ZHFFXFT"
+        ]
+      },
+      "photoshop_candidates": [
+        "ZHFFXFT"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-zhengkuchaojihei",
+      "display_name": "字魂正酷超级黑",
+      "file": "zihun-zhengkuchaojihei.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "zihun143-zhengkuchaojihei",
+          "字魂143号-正酷超级黑"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "zihun143-zhengkuchaojihei"
+        ],
+        "postscript_name": [
+          "zihun143-zhengkuchaojihei"
+        ]
+      },
+      "photoshop_candidates": [
+        "zihun143-zhengkuchaojihei"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-longyinshoushu",
+      "display_name": "字魂龙吟手书",
+      "file": "zihun-longyinshoushu.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "zihunlongyinshoushu",
+          "字魂龙吟手书"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "zihunlongyinshoushu",
+          "字魂龙吟手书"
+        ],
+        "postscript_name": [
+          "zihunlongyinshoushu"
+        ]
+      },
+      "photoshop_candidates": [
+        "zihunlongyinshoushu"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-guochaoshoushu",
+      "display_name": "字魂国潮手书",
+      "file": "zihun-guochaoshoushu.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "zihun43hao-guochaoshoushu",
+          "字魂43号-国潮手书"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "zihun43hao-guochaoshoushu"
+        ],
+        "postscript_name": [
+          "zihun43hao-guochaoshoushu"
+        ]
+      },
+      "photoshop_candidates": [
+        "zihun43hao-guochaoshoushu",
+        "zihun43hao-guochaoshoushu-Regular"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-ruiyihei",
+      "display_name": "字魂锐艺黑",
+      "file": "zihun-ruiyihei.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "zihun154hao-ruiyihei",
+          "字魂154号-锐艺黑"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "zihun154hao-ruiyihei"
+        ],
+        "postscript_name": [
+          "zihun154hao-ruiyihei"
+        ]
+      },
+      "photoshop_candidates": [
+        "zihun154hao-ruiyihei"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-baibianmoshuti",
+      "display_name": "字魂百变魔术体",
+      "file": "zihun-baibianmoshuti.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "zihunbaibianmoshuti",
+          "字魂百变魔术体"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "zihunbaibianmoshuti",
+          "字魂百变魔术体"
+        ],
+        "postscript_name": [
+          "zihunbaibianmoshuti"
+        ]
+      },
+      "photoshop_candidates": [
+        "zihunbaibianmoshuti"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-fangyuehei",
+      "display_name": "字魂方悦黑",
+      "file": "zihun-fangyuehei.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "zihunfangyuehei",
+          "字魂方悦黑"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "zihunfangyuehei",
+          "字魂方悦黑"
+        ],
+        "postscript_name": [
+          "zihunfangyuehei"
+        ]
+      },
+      "photoshop_candidates": [
+        "zihunfangyuehei"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-jingdianyahei",
+      "display_name": "字魂经典雅黑",
+      "file": "zihun-jingdianyahei.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "zihunjingdianyahei",
+          "字魂经典雅黑"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "zihunjingdianyahei",
+          "字魂经典雅黑"
+        ],
+        "postscript_name": [
+          "zihun35hao-jingdianyahei-Regular"
+        ]
+      },
+      "photoshop_candidates": [
+        "zihun35hao-jingdianyahei-Regular"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    },
+    {
+      "id": "zihun-yuesong",
+      "display_name": "字魂阅宋",
+      "file": "zihun-yuesong.ttf",
+      "bundled_internal_names": {
+        "family": [
+          "zihunyuesong_T",
+          "字魂阅宋(商用需授权)"
+        ],
+        "subfamily": [
+          "Regular"
+        ],
+        "full_name": [
+          "zihunyuesong_T",
+          "字魂阅宋(商用需授权)"
+        ],
+        "postscript_name": [
+          "zihunyuesong_T"
+        ]
+      },
+      "photoshop_candidates": [
+        "zihunyuesong_T"
+      ],
+      "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
+    }
+  ]
+}

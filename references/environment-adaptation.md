@@ -88,7 +88,8 @@ Start-Process -FilePath "explorer.exe" -ArgumentList "`"$psExe`""
 - Photoshop 通常需要操作系统已安装字体才能稳定识别 PostScript name。
 - 安装字体会修改系统状态，必须先获得用户对授权和安装范围的明确同意。
 - 安装或更新字体后，关闭并重新启动 Photoshop，再做字体测试。
-- 最终必须读取 Photoshop report，确认 `actualFont` 没有回退。
+- 安装前先查 `assets/fonts/photoshop-font-name-map.json`；如果 Photoshop 已识别同一字体的版本别名，不要重复安装，只需锁定实际候选名称。
+- 最终必须读取 Photoshop report，确认 `actualFont` 等于本任务的 `resolved_photoshop_font_name`，没有回退。
 
 ## 确认式一键安装
 

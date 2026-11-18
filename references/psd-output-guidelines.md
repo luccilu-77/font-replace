@@ -22,7 +22,7 @@ PSD 是本 skill 的固定交付物，不是可选模式。交付标准是：Pho
 - 中文字体名。
 - Photoshop `textItem.font` 需要的 PostScript/font name。
 
-不能只凭字体文件名猜测 Photoshop font name。创建测试文字层后读取 `layer.textItem.font` 是最可靠的确认方式之一。
+不能只凭字体文件名猜测 Photoshop font name。先读取 `assets/fonts/photoshop-font-name-map.json` 的候选名称并与 Photoshop 字体列表匹配，再创建测试文字层读取 `layer.textItem.font`。命中值应写入 `resolved_photoshop_font_name`，作为当前任务的唯一锁定名称。
 
 如果 Photoshop 实际使用的字体不是目标字体，尤其回退到 `AdobeHeiti`、`SimHei`、`MicrosoftYaHei`、普通黑体等，必须先修正字体安装或 font name，不能交付。
 

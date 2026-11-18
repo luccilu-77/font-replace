@@ -20,10 +20,10 @@
 
 字体解析顺序：
 
-1. 查 [font-name-cache.md](font-name-cache.md)。
-2. 查当前任务或历史任务 report。
-3. 缓存未命中或已失效时，用 Photoshop 测试文字层或字体 name table 确认。
-4. 在最终 report 中复核 `actualFont`；缓存命中不能代替最终验证。
+1. 查 [font-name-cache.md](font-name-cache.md) 和 `assets/fonts/photoshop-font-name-map.json`。
+2. 按 `photoshop_candidates` 顺序与 Photoshop 实际字体列表匹配，将命中值锁定为 `resolved_photoshop_font_name`。
+3. 使用锁定名称创建测试文字层并读取 `actualFont`；未命中时再检查当前任务、历史 report、安装状态和版本冲突。
+4. 只有 `actualFont` 与锁定名称完全一致才继续；缓存命中不能代替最终验证。
 
 ## 3. 使用 Image 2 清理目标文字
 

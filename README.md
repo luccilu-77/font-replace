@@ -214,7 +214,7 @@ bash scripts/install-bundled-fonts-macos.sh --confirm-authorized-use
 1. 检测运行环境和 Photoshop 版本。
 2. 识别目标文字与必须保留的内容。
 3. 记录文字 bbox、颜色、旋转、字距、行距和字效层级。
-4. 确认字体文件与 Photoshop PostScript/font name。
+4. 通过 `assets/fonts/photoshop-font-name-map.json` 确认字体文件、版本别名与 Photoshop PostScript/font name，并锁定实际命中名称。
 5. 使用 Image 2 / image-gen 清理指定旧文字。
 6. 将清理底图恢复到原画布尺寸。
 7. 在 Photoshop 中创建原生 `TEXT` 图层并对齐原 bbox。
@@ -245,6 +245,26 @@ bash scripts/install-bundled-fonts-macos.sh --confirm-authorized-use
 
 完整机器可读清单位于 `assets/fonts/font-manifest.json`。
 
+字体名称锁定表位于 `assets/fonts/photoshop-font-name-map.json`。它记录每款随包字体的内部 family、full name、PostScript name，以及不同发行版本可能出现的 Photoshop 候选名称。需要重新扫描随包字体时运行：
+
+```bash
+python scripts/build_font_name_map.py \
+  --manifest assets/fonts/font-manifest.json \
+  --font-dir assets/fonts \
+  --out assets/fonts/photoshop-font-name-map.json
+```
+
+拿到 Photoshop 字体清单后，可按字体 ID、中文名或文件名锁定实际名称：
+
+```bash
+python scripts/resolve_photoshop_font_name.py \
+  --map assets/fonts/photoshop-font-name-map.json \
+  --font 字魂国潮手书 \
+  --available-fonts photoshop-font-inventory.tsv
+```
+
+输出中的 `resolved_photoshop_font_name` 必须写入任务布局或字体 report，并在最终 PSD 中通过 `actualFont` 再次确认。
+
 字体替换优先匹配原字的字形，而不是按行业或场景硬套：比较笔画粗细、字面宽窄、结构与重心、圆角/尖角、书写节奏和视觉密度。同一张图可按主标题、副标题、正文、数字等角色混用多款字体。
 
 下表只是便于快速查找的字形参考分组，不是使用限制：
@@ -258,7 +278,7 @@ bash scripts/install-bundled-fonts-macos.sh --confirm-authorized-use
 | 手写、书写节奏与个性 | 字魂海马体、字魂夏日诗歌体、字魂龙吟手书、字魂国潮手书 |
 | 宋体骨架与人文阅读感 | 字魂阅宋 |
 
-用户指定的字体不在随包清单中时，可以使用系统中已安装的字体或用户另外提供的字体文件，但仍需确认 Photoshop 实际 font name。
+用户指定的字体不在随包清单中时，可以使用系统中已安装的字体或用户另外提供的字体文件，但仍需确认 Photoshop 实际 font name。同一字体不同版本可能存在 `-Regular` 等差异，随包字体的已知别名见 `assets/fonts/photoshop-font-name-map.json`。
 
 ## Photoshop 专业图层结构
 
@@ -345,6 +365,7 @@ font-image-text-replace-01/
 |   |-- examples/
 |   `-- fonts/
 |       |-- font-manifest.json
+|       |-- photoshop-font-name-map.json
 |       `-- 21 font files
 |-- references/
 |   |-- photoshop-layer-architecture.md
@@ -357,6 +378,8 @@ font-image-text-replace-01/
     |-- install-bundled-fonts-macos.sh
     |-- run-photoshop-smoke-test-macos.sh
     |-- photoshop-smoke-test.jsx
+    |-- build_font_name_map.py
+    |-- resolve_photoshop_font_name.py
     |-- prepare_photoshop_layers.py
     |-- render_text_replacement.py
     `-- validate_text_replacement.py

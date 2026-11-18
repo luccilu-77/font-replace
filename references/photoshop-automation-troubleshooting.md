@@ -83,6 +83,8 @@ u.SendMessageTimeoutW(
 
 关键判断：**必须以 Photoshop 报告中的 `actualFont` 为准**，不能只看安装脚本返回成功，也不能只看字体文件存在。
 
+若字体文件存在且系统已注册，但 `actualFont` 仍回退，先查 `assets/fonts/photoshop-font-name-map.json`。同一字体的不同发行版本可能使用不同 PostScript name，例如字魂国潮手书可能是 `zihun43hao-guochaoshoushu` 或 `zihun43hao-guochaoshoushu-Regular`。应先匹配 Photoshop 实际字体列表并锁定可用别名，不要立即重复安装或覆盖字体。
+
 ## 4. 症状：ExtendScript 里 `JSON` 未定义
 
 Photoshop 的 ExtendScript 运行环境没有内置 `JSON` 对象，直接 `JSON.stringify()` 会报错，导致报告写不出来、JSX 中断。

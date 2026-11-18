@@ -27,7 +27,7 @@ description: Replace existing text fonts in uploaded images while preserving the
 | [mode-selection.md](references/mode-selection.md) | 判断使用标准栅格图流程，还是直接编辑用户提供的可编辑源文件 | 输入类型、交付路线或是否需要清字不明确时 |
 | [native-photoshop-image2-workflow.md](references/native-photoshop-image2-workflow.md) | 标准任务的端到端操作流程，涵盖目标确认、Image 2 清字、尺寸恢复、Photoshop 重建和失败分流 | 处理 JPG、PNG、WebP 等普通图片时 |
 | [text-analysis-and-rendering.md](references/text-analysis-and-rendering.md) | 文字块分析、布局 JSON 字段和字效拆解方法 | 记录 bbox、旋转、颜色、描边、阴影、层级或生成布局数据时 |
-| [font-name-cache.md](references/font-name-cache.md) | 字魂字体中文名、字体文件名与 Photoshop font name 的已确认映射 | 查找或验证 Photoshop 可用字体名时；缓存命中后仍要在最终 report 中复核 |
+| [font-name-cache.md](references/font-name-cache.md) | 字魂字体中文名、文件内部名称、版本别名与 Photoshop font name 的锁定规则；机器表位于 `assets/fonts/photoshop-font-name-map.json` | 查找或验证 Photoshop 可用字体名时；缓存命中后仍要在最终 report 中复核 |
 | [psd-output-guidelines.md](references/psd-output-guidelines.md) | Photoshop 能力检查、原生文字层结构、PSD 保存方式和最终验证标准 | 开始 Photoshop 自动化前，以及交付 PSD 前 |
 | [photoshop-layer-architecture.md](references/photoshop-layer-architecture.md) | 专业图层命名、竖排文本框、语义块合并、分组与图层数量审计 | 生成布局数据后、创建 Photoshop 文字层前，以及交付 PSD 前 |
 | [photoshop-automation-troubleshooting.md](references/photoshop-automation-troubleshooting.md) | 已验证的 Photoshop 自动化排障解法：无窗口句柄时经 shell 启动并转发 JSX、受限环境调用绕行、字体注册核验、文字层定位与字效重叠修复 | JSX 不执行、PS 无窗口句柄、字体回退、文字跑出画布或自动化被环境限制时 |
@@ -39,7 +39,7 @@ description: Replace existing text fonts in uploaded images while preserving the
 2. 若任务需要随包字体但 Photoshop 尚未识别，先询问用户：“确认已拥有这些字体的合法使用授权，并允许安装全部 21 款到当前用户吗？”只有用户明确同意后，才执行当前平台的一键安装脚本。系统级安装必须再次明确指定并具备管理员权限。
 3. 确认原图、目标文字、保留文字和指定字体。logo、二维码、水印、状态栏、AI 标识及用户未点名的品牌文字默认保留。
 4. 按语义文字块分析目标文字，并记录文字、字体、bbox、字号、方向、旋转、颜色、字距、行距、字效和层级。连续横排或单列竖排优先作为一个文本框，不按单字拆层。具体字段见 [text-analysis-and-rendering.md](references/text-analysis-and-rendering.md)。
-5. 用户指定字体时严格使用指定字体；未指定时优先从 `assets/fonts/font-manifest.json` 的 21 款随包字体中按字形相似度选择。依次比较笔画粗细、字面宽窄、结构与重心、圆角/尖角、书写节奏和视觉密度；清单中的分组及示例用途不是场景限制。同一画面可按主标题、副标题、正文、数字等文字角色混用不同字体。无法可靠判断时使用 `字魂荧智 W3` 或 `W6`。字体文件名、中文字体名与 Photoshop font name 必须分别确认。
+5. 用户指定字体时严格使用指定字体；未指定时优先从 `assets/fonts/font-manifest.json` 的 21 款随包字体中按字形相似度选择。依次比较笔画粗细、字面宽窄、结构与重心、圆角/尖角、书写节奏和视觉密度；清单中的分组及示例用途不是场景限制。同一画面可按主标题、副标题、正文、数字等文字角色混用不同字体。无法可靠判断时使用 `字魂荧智 W3` 或 `W6`。选定字体后读取 `assets/fonts/photoshop-font-name-map.json`，按候选名称与 Photoshop 实际字体列表匹配，将命中名称锁定为 `resolved_photoshop_font_name`；不得只根据文件名猜测。
 6. 按 [photoshop-layer-architecture.md](references/photoshop-layer-architecture.md) 整理布局：同一语义块合并为一个原生文字层；图层名使用实际文案，超过 20 字符截断并保证唯一；竖排文字使用竖排文本框。可运行 `scripts/prepare_photoshop_layers.py` 生成规范布局与图层数量审计。
 7. 对普通栅格图，按 [native-photoshop-image2-workflow.md](references/native-photoshop-image2-workflow.md) 清理目标文字并恢复原画布尺寸；已有可编辑源文件时先按 [mode-selection.md](references/mode-selection.md) 判断是否可以直接编辑。
 8. 按 [psd-output-guidelines.md](references/psd-output-guidelines.md) 创建并验证 Photoshop 原生文字层，导出 PSD、最终 PNG 和字体 report。若 JSX 不执行、字体回退或文字层定位异常，按 [photoshop-automation-troubleshooting.md](references/photoshop-automation-troubleshooting.md) 排查后继续，不要把 PSD 步骤推回给用户。
@@ -52,7 +52,7 @@ description: Replace existing text fonts in uploaded images while preserving the
 - Image 2 / image-gen 只负责移除目标旧文字，不负责生成最终可读文字。
 - 不用模糊、涂抹或本地内容识别结果冒充 Image 2 清理底图。
 - 不用整图、位图文字层或矢量轮廓冒充 Photoshop 原生可编辑文字层。
-- 不用系统默认字体冒充指定字体；发现字体回退时必须修正或明确说明受阻。
+- 不用系统默认字体冒充指定字体；发现字体回退时，先用名称对照表尝试该字体的其他版本别名，再处理安装或版本冲突。
 - 不静默安装随包字体；安装前必须获得用户对授权和安装范围的明确同意。字体“文件已复制”不等于注册成功，必须以 Photoshop 报告中的 `actualFont` 为准。
 - 不把连续横排或竖排文字无理由拆成单字层；拆分必须记录 `split_reason`。
 - 文字图层必须以对应文案命名；长文案按图层规范截断，同名层追加稳定序号。
