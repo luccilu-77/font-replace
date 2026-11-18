@@ -28,6 +28,7 @@ def validate_layout(path: Path) -> list[str]:
     texts = data.get("texts", data if isinstance(data, list) else None)
     if not isinstance(texts, list) or not texts:
         return ["layout must contain a non-empty texts list"]
+    layer_names: list[str] = []
     for idx, item in enumerate(texts):
         missing = REQUIRED_FIELDS - set(item)
         if missing:
@@ -37,6 +38,20 @@ def validate_layout(path: Path) -> list[str]:
             errors.append(f"text[{idx}] bbox must be [x, y, width, height]")
         elif bbox[2] <= 0 or bbox[3] <= 0:
             errors.append(f"text[{idx}] bbox width/height must be positive")
+        orientation = item.get("orientation")
+        if orientation is not None and orientation not in {"horizontal", "vertical"}:
+            errors.append(f"text[{idx}] orientation must be horizontal or vertical")
+        layer_name = item.get("layer_name")
+        if layer_name is not None:
+            layer_name = str(layer_name)
+            layer_names.append(layer_name)
+            if not layer_name.strip():
+                errors.append(f"text[{idx}] layer_name must not be empty")
+            if len(layer_name) > 20:
+                errors.append(f"text[{idx}] layer_name exceeds 20 characters: {layer_name}")
+    duplicates = sorted({name for name in layer_names if layer_names.count(name) > 1})
+    if duplicates:
+        errors.append(f"duplicate layer_name values: {', '.join(duplicates)}")
     return errors
 
 

@@ -69,61 +69,67 @@ macOS 首次控制 Photoshop 时可能弹出自动化权限请求。用户应在
 
 不要自动下载 Photoshop，不提供非官方安装包，不用位图文字 PSD 冒充完成结果。
 
+## Photoshop 启动与脚本执行
+
+Photoshop 已安装但转发的 JSX 不执行、进程 `MainWindowHandle = 0` 时，不要直接判定 PSD 自动化受阻，更不要把脚本交给用户自己运行。改用 explorer shell 启动 Photoshop，使进程挂到交互桌面，再命令行转发 JSX：
+
+```powershell
+Start-Process -FilePath "explorer.exe" -ArgumentList "`"$psExe`""
+& $psExe "$jsxPath"
+```
+
+完整解法、受限环境的调用绕行和字体注册核验见 [photoshop-automation-troubleshooting.md](photoshop-automation-troubleshooting.md)。
+
 ## 字体环境
 
 随包字体位于 `assets/fonts/`，清单见 `assets/fonts/font-manifest.json`。
 
 - 本地渲染脚本可以直接读取字体文件。
 - Photoshop 通常需要操作系统已安装字体才能稳定识别 PostScript name。
-- 安装字体会修改当前用户字体目录，因此必须先获得用户明确同意。
+- 安装字体会修改系统状态，必须先获得用户对授权和安装范围的明确同意。
 - 安装或更新字体后，关闭并重新启动 Photoshop，再做字体测试。
 - 最终必须读取 Photoshop report，确认 `actualFont` 没有回退。
 
 ## 确认式一键安装
 
-仅当任务需要随包字体、且 Photoshop 尚未识别这些字体时，向用户询问：
+仅当任务需要随包字体且 Photoshop 尚未识别时，询问：
 
 > 确认已拥有这些字体的合法使用授权，并允许安装全部 21 款到当前用户吗？
 
-普通字体替换请求、上传图片或选择字体，不等于安装授权。只有用户明确回答同意后，才能执行系统修改。
+用户明确同意后才执行安装。只有文件存在**且**注册表项存在才算已安装；脚本会补齐只拷了文件却未注册的字体。普通字体替换请求不等于安装授权。
 
 ### Windows 安装
 
-预览：
+预览与当前用户安装：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass `
   -File scripts\install-bundled-fonts.ps1 -WhatIf
-```
 
-安装：
-
-```powershell
 powershell -NoProfile -ExecutionPolicy Bypass `
-  -File scripts\install-bundled-fonts.ps1 -ConfirmAuthorizedUse
+  -File scripts\install-bundled-fonts.ps1 -ConfirmAuthorizedUse -CurrentUser
 ```
 
-- 安装到当前用户 `%LOCALAPPDATA%\Microsoft\Windows\Fonts`。
-- 写入当前用户字体注册信息，不要求管理员权限。
-- 已登记字体默认跳过，覆盖安装必须得到用户明确要求并添加 `-Force`。
-- 安装成功后广播 Windows 字体变更，但仍需重启 Photoshop。
+- 默认安装到当前用户 `%LOCALAPPDATA%\Microsoft\Windows\Fonts` + HKCU。
+- 仅当用户明确要求系统级安装时使用 `-SystemWide`；该模式写入 `C:\Windows\Fonts` 和 HKLM，需要管理员权限。
+- 缺少 `-ConfirmAuthorizedUse` 时拒绝实际安装。
+- 需要预览安装清单时使用 `-WhatIf`。
+- 已同时存在字体文件和注册表项的字体默认跳过，强制覆盖用 `-Force`。
+- 安装后广播 Windows 字体变更，但仍需重启 Photoshop；若广播被安全策略拦截，用 Python `ctypes` 发送 `WM_FONTCHANGE`，见 [photoshop-automation-troubleshooting.md](photoshop-automation-troubleshooting.md)。
 
 ### macOS 安装
 
-预览：
+预览与安装：
 
 ```bash
 bash scripts/install-bundled-fonts-macos.sh --dry-run
-```
-
-安装：
-
-```bash
 bash scripts/install-bundled-fonts-macos.sh --confirm-authorized-use
 ```
 
-- 安装到当前用户 `~/Library/Fonts`，不要求管理员权限。
-- 同名字体默认跳过；覆盖安装必须得到用户明确要求并添加 `--force`。
+- 安装到当前用户 `~/Library/Fonts`，不需要管理员权限。
+- 缺少 `--confirm-authorized-use` 时拒绝实际安装。
+- 同名字体默认跳过；强制覆盖用 `--force`。
+- 需要预览安装清单时使用 `--dry-run`。
 - 不自动删除 macOS 字体缓存，不调用 `sudo`。
 - 安装后退出并重新打开 Photoshop，再验证字体实际名称。
 
@@ -131,14 +137,14 @@ bash scripts/install-bundled-fonts-macos.sh --confirm-authorized-use
 
 - Windows 安装器缺少 `-ConfirmAuthorizedUse` 时拒绝安装。
 - macOS 安装器缺少 `--confirm-authorized-use` 时拒绝安装。
-- 安装命令在 Codex 沙箱或受限环境运行时，需要用户批准对真实用户字体目录的写入；沙箱映射目录不算安装成功。
-- Windows 检查安装结果 JSON 中的 `installed`、`already_installed` 和 `failed`。
+- 安装命令在受限环境运行时仍需在真实用户环境执行；沙箱映射目录不算安装成功。
+- Windows 检查安装结果 JSON 中的 `installed`、`already_installed` 和 `failed`，并核对 `scope`、`destination` 与 `registry_path`。
 - macOS 检查 `SUMMARY` 中的 `installed`、`skipped` 和 `failed`。
-- Photoshop 重启后创建测试文字层，确认 `actualFont` 与 `font-manifest.json` 一致。
+- Photoshop 重启后创建测试文字层，确认 `actualFont` 与 `font-manifest.json` 一致；若仍回退到 `AdobeHeiti` 等默认字体，按 [photoshop-automation-troubleshooting.md](photoshop-automation-troubleshooting.md) 第 3 节核验注册状态。
 
 ## 支持边界
 
-- Windows：PowerShell 5.1 及以上，已在 Photoshop 25.5 环境验证检测脚本。
+- Windows：PowerShell 5.1 及以上，已在 Photoshop 25.5 与 27.0 环境验证检测与字体安装。
 - macOS：使用系统 Bash、`PlistBuddy`、`defaults` 和 `osascript`；脚本兼容 Bash 3.2 语法。
 - Mac 脚本已完成静态语法检查，但仍应在真实 Intel 或 Apple Silicon Mac 上完成一次安装和 Photoshop 自动化验证。
 - Linux：可以读取字体资产和生成临时 PNG，但不支持 Photoshop 原生 PSD 自动化。

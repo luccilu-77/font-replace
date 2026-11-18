@@ -1,6 +1,8 @@
 [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium")]
 param(
     [switch]$ConfirmAuthorizedUse,
+    [switch]$SystemWide,
+    [switch]$CurrentUser,
     [switch]$Force
 )
 
@@ -10,9 +12,28 @@ if ($env:OS -ne "Windows_NT") {
     throw "This installer currently supports Windows only."
 }
 
-if (-not $WhatIfPreference -and -not $ConfirmAuthorizedUse) {
-    throw "Installation requires explicit authorization. Confirm that the user is licensed to use these fonts, then rerun with -ConfirmAuthorizedUse."
+if ($SystemWide -and $CurrentUser) {
+    throw "Use either -SystemWide or -CurrentUser, not both."
 }
+
+if (-not $WhatIfPreference -and -not $ConfirmAuthorizedUse) {
+    throw "Installation requires explicit authorization. Confirm licensed use and rerun with -ConfirmAuthorizedUse."
+}
+
+$isAdmin = $false
+try {
+    $principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+    $isAdmin = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+} catch {
+    $isAdmin = $false
+}
+
+if ($SystemWide -and -not $isAdmin) {
+    throw "-SystemWide requires administrator privileges."
+}
+
+# Default to current-user scope. System-wide installation must be explicit.
+$useSystemScope = [bool]$SystemWide
 
 $skillRoot = Split-Path -Parent $PSScriptRoot
 $fontDir = Join-Path $skillRoot "assets\fonts"
@@ -22,13 +43,20 @@ if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) {
     throw "Font manifest not found: $manifestPath"
 }
 
-if ([string]::IsNullOrWhiteSpace($env:LOCALAPPDATA)) {
-    throw "LOCALAPPDATA is unavailable; the current-user font directory cannot be resolved."
+if ($useSystemScope) {
+    $destination = Join-Path $env:WINDIR "Fonts"
+    $registryPath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts"
+    $scope = "system"
+} else {
+    if ([string]::IsNullOrWhiteSpace($env:LOCALAPPDATA)) {
+        throw "LOCALAPPDATA is unavailable; the current-user font directory cannot be resolved."
+    }
+    $destination = Join-Path $env:LOCALAPPDATA "Microsoft\Windows\Fonts"
+    $registryPath = "HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Fonts"
+    $scope = "current-user"
 }
 
 $manifest = Get-Content -Raw -Encoding UTF8 -LiteralPath $manifestPath | ConvertFrom-Json
-$destination = Join-Path $env:LOCALAPPDATA "Microsoft\Windows\Fonts"
-$registryPath = "HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Fonts"
 
 $installed = @()
 $alreadyInstalled = @()
@@ -55,13 +83,17 @@ foreach ($font in $manifest.fonts) {
         }
     }
 
-    if (((Test-Path -LiteralPath $target) -or $registered) -and -not $Force) {
+    $filePresent = Test-Path -LiteralPath $target -PathType Leaf
+
+    # A copied file alone does not mean the font is installed. Only skip when
+    # BOTH the file and the registry entry are present.
+    if ($filePresent -and $registered -and -not $Force) {
         $alreadyInstalled += $font.display_name
         continue
     }
 
     try {
-        if ($PSCmdlet.ShouldProcess($target, "Install current-user font $($font.display_name)")) {
+        if ($PSCmdlet.ShouldProcess($target, "Install font $($font.display_name)")) {
             New-Item -ItemType Directory -Force -Path $destination | Out-Null
             New-Item -Path $registryPath -Force | Out-Null
             Copy-Item -LiteralPath $source -Destination $target -Force
@@ -115,6 +147,9 @@ public static class FontChangeNotifier
     try {
         $fontChangeBroadcast = [FontChangeNotifier]::Broadcast()
     } catch {
+        # Add-Type / Win32 calls can be blocked in restricted sandboxes.
+        # See references/photoshop-automation-troubleshooting.md for the
+        # Python ctypes fallback used to broadcast WM_FONTCHANGE.
         $fontChangeBroadcast = $false
     }
 }
@@ -122,11 +157,13 @@ public static class FontChangeNotifier
 $result = [pscustomobject]@{
     schema_version = 1
     license_and_installation_confirmed = [bool]$ConfirmAuthorizedUse
+    scope = $scope
     expected = @($manifest.fonts).Count
     installed = @($installed)
     already_installed = @($alreadyInstalled)
     failed = @($failed)
     destination = $destination
+    registry_path = $registryPath
     font_change_broadcast = $fontChangeBroadcast
     restart_photoshop_required = ($installed.Count -gt 0)
     next_step = "Restart Photoshop, create a test text layer, and verify actualFont against font-manifest.json."

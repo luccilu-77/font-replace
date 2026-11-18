@@ -36,7 +36,7 @@ fi
 
 if [ "$dry_run" -ne 1 ] && [ "$confirmed" -ne 1 ]; then
     echo "Installation requires explicit authorization." >&2
-    echo "Confirm that the user is licensed to use these fonts, then rerun with --confirm-authorized-use." >&2
+    echo "Confirm licensed use, then rerun with --confirm-authorized-use." >&2
     exit 5
 fi
 

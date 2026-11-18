@@ -10,6 +10,8 @@ PSD 是本 skill 的固定交付物，不是可选模式。交付标准是：Pho
 
 如果 Photoshop 不可用，不要声称已经生成真实可编辑文字层 PSD。明确提示用户通过 Adobe Creative Cloud 安装 Photoshop 并完成首次启动，然后重新检测。可以先交付 PNG、清理底图、布局 JSON 或透明文字层作为临时辅助文件，但必须说明最终 PSD 原生文字层受阻，不能把临时文件当成完成交付。
 
+如果 Photoshop 已安装但 JSX 不执行、窗口句柄为 0、COM/脚本宿主调用被拦截，或字体/文字层定位异常，按 [photoshop-automation-troubleshooting.md](photoshop-automation-troubleshooting.md) 自行排查并继续完成 PSD；解决前不要把脚本交给用户自己运行，也不要把环境限制当作无法交付的理由。
+
 ## 字体检查
 
 必须检查目标字体是否被 Photoshop 识别。
@@ -26,14 +28,25 @@ PSD 是本 skill 的固定交付物，不是可选模式。交付标准是：Pho
 
 ## 固定 PSD 目标
 
+创建文字层前必须读取 [photoshop-layer-architecture.md](photoshop-layer-architecture.md)。专业交付以“一个语义文字块一个文字层”为默认，不以字符数量拆层。
+
 最低图层结构：
 
-1. `00-clean-background`：image 2 / image-gen 清理后的底图。
-2. `10-editable-*`：每个目标文字块一个 Photoshop 原生文字层。
-3. `11-text-effects-*`：可选效果层或图层样式。
-4. `90-original-reference`：可选隐藏参考层，用于人工对照。
+1. `00-清理底图`：image 2 / image-gen 清理后的底图。
+2. 文字层：每个语义文字块一个 Photoshop 原生文字层，名称直接使用文案，例如 `寻找`。
+3. `FX-<文案>`：仅在图层样式无法完成时使用的可选效果辅助层。
+4. `90-原图参考`：可选隐藏参考层，用于人工对照。
 
-`10-editable-*` 必须是 Photoshop 原生文字层。描边、阴影、外发光应优先使用图层样式；若需要少量辅助位图效果，必须命名为 `optional-effect-raster`，并保留可编辑文字层作为主体。
+文字层必须是 Photoshop 原生文字层。描边、阴影、外发光应优先使用图层样式；若需要少量辅助位图效果，必须命名为 `FX-<文案>`，并保留可编辑文字层作为主体。
+
+图层命名和合并要求：
+
+- 图层名来自真实文案；默认最多 20 字符，超长用 `…` 截断。
+- 同名层追加 `-02`、`-03`。
+- 连续横排、单列竖排及同一段说明文字必须优先合并成一个文本框。
+- 竖排中文使用 `Direction.VERTICAL`；多列竖排按列拆分，不按字拆分。
+- 只有独立字形变换、颜色/字体差异、路径文字或遮挡层级需要时才拆层，并记录 `split_reason`。
+- 可以先运行 `scripts/prepare_photoshop_layers.py` 生成 `layer_name`、`layer_group` 和审计报告。
 
 ## 最终 PSD 写入方式
 
@@ -44,13 +57,15 @@ PSD 是本 skill 的固定交付物，不是可选模式。交付标准是：Pho
 推荐流程：
 
 1. 打开清理底图。
-2. 创建每个 `LayerKind.TEXT` 文字层。
+2. 按规范布局创建每个 `LayerKind.TEXT` 文字层；设置完 `contents` 后同步设置 `layer.name = layer_name`。
 3. 设置 `textItem.contents`、`textItem.font`、`textItem.size`、`textItem.color`。
 4. 读取文字层 bounds。
-5. 自动缩放/平移到目标 bbox。
-6. 保存 PSD。
-7. 导出 PNG 预览。
-8. 写出 report JSON。
+5. 横排使用普通文本方向；竖排设置 `textItem.direction = Direction.VERTICAL`，优先使用段落文本框。
+6. 自动缩放/平移到目标 bbox。
+7. 按主标题、副标题、正文、装饰文字和效果层组织分组，避免无意义嵌套。
+8. 保存 PSD。
+9. 导出 PNG 预览。
+10. 写出 report JSON 和图层审计结果。
 
 ## 验证要求
 
@@ -59,7 +74,10 @@ PSD 是本 skill 的固定交付物，不是可选模式。交付标准是：Pho
 - PSD 尺寸等于原图尺寸。
 - Photoshop 打开后文字直接可见。
 - 图层面板中每个目标文字层显示为文字层。
-- 隐藏任意 `10-editable-*` 层时，对应文字消失。
+- 图层名称与对应文案一致，长文案正确截断且同名层序号稳定。
+- 隐藏任意文字层时，对应语义文字块整体消失，而不是只消失一个普通字符。
+- 连续竖排文字为一个竖排文本框；无理由单字层数量为 0。
+- 文字层数量接近语义文字块数量，任何额外拆分都有 `split_reason`。
 - report 中 `actualFont` 等于目标字体。
 - PNG 预览与 PSD 当前可见效果一致。
 
@@ -73,3 +91,5 @@ PSD 是本 skill 的固定交付物，不是可选模式。交付标准是：Pho
 - 不得让装饰层压住文字。
 - 不得把阴影层放到文字填充上方造成脏边。
 - 不得用位图文字层替代原生文字层。
+- 不得把 OCR 逐字结果直接转成一字一层。
+- 不得用原图竖排作为拆成单字层的理由。

@@ -16,7 +16,7 @@
 
 ## 2. 分析文字并确认字体
 
-按 [text-analysis-and-rendering.md](text-analysis-and-rendering.md) 为每个文字块建立布局记录。bbox 使用原图像素坐标。
+按 [text-analysis-and-rendering.md](text-analysis-and-rendering.md) 为每个语义文字块建立布局记录。bbox 使用原图像素坐标。OCR 若逐字返回，先用 `block_id` 还原成横排文本块或竖排文本列，再按 [photoshop-layer-architecture.md](photoshop-layer-architecture.md) 生成专业图层结构。
 
 字体解析顺序：
 
@@ -51,18 +51,21 @@ Do not add new text, pseudo-text, letters, numbers, logos, labels, symbols, or d
 按 [psd-output-guidelines.md](psd-output-guidelines.md) 执行：
 
 1. 打开通过检查的清理底图。
-2. 为每个目标文字块创建独立的原生 `TEXT` 图层。
-3. 设置文案、真实 Photoshop font name、字号、颜色、字距、行距和旋转。
-4. 读取文字层 bounds，并按目标 bbox 自动缩放和平移。
-5. 使用图层样式或命名清楚的辅助效果层复刻描边、阴影和外发光。
-6. 保存 PSD，导出当前可见效果 PNG，并写出字体 report。
+2. 运行 `scripts/prepare_photoshop_layers.py` 合并同一 `block_id` 的逐字记录，并生成文案图层名与审计报告。
+3. 为每个语义文字块创建独立的原生 `TEXT` 图层；连续竖排文字使用一个竖排文本框。
+4. 设置文案、真实 Photoshop font name、字号、方向、颜色、字距、行距和旋转，并把图层命名为规范布局中的 `layer_name`。
+5. 读取文字层 bounds，并按目标 bbox 自动缩放和平移。
+6. 使用图层样式或 `FX-<文案>` 辅助效果层复刻描边、阴影和外发光。
+7. 按文字角色分组，保存 PSD，导出当前可见效果 PNG，并写出字体 report 和图层审计。
 
 ## 6. 失败分流
 
 - 清理残留或误删：只重跑对应区域的 Image 2 清理。
 - 字体回退：修正字体安装或 font name，再重导 PSD、PNG 和 report。
 - 文字位置或字效不准：修改布局数据或 Photoshop 参数，不重跑已经合格的底图。
+- 文字层过多：检查是否把 OCR 单字直接建层；按 `block_id` 合并，竖排改为单个竖排文本框。只有存在 `split_reason` 才保留拆分。
 - PSD 图层不可编辑：修正 Photoshop 生成方式，不用位图层或第三方 PSD 写入结果替代。
+- JSX 不执行或 PS 无窗口句柄：按 [photoshop-automation-troubleshooting.md](photoshop-automation-troubleshooting.md) 用 shell 启动并转发脚本，不把 PSD 步骤推回给用户。
 - 预览错误：只修正最终可见状态和 PNG 导出。
 
 返修和停止条件见 [performance-optimization.md](performance-optimization.md)。

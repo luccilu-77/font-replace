@@ -2,7 +2,7 @@
 
 在不重新设计画面的前提下，只替换用户指定的普通文字字体，并保持原文案、位置、字号比例、颜色、旋转、描边、阴影、背景、主体和构图不变。文字型 Logo、品牌标识、二维码、水印以及用户未点名的文字默认保留，不进行替换；只有用户明确指定时才处理。
 
-用户可以直接指定目标字体；未指定时，AI 会根据原文字的笔画粗细、字面宽窄、结构与重心、圆角或尖角、书写节奏及整体画面气质，从随包字体中选择字形相近的字体，也可以按主标题、副标题、正文和数字等文字角色组合使用。标准交付包括最终 PNG 预览，以及带 Photoshop 原生可编辑文字层的 PSD。精简包随附 21 款常用字魂字体，并提供 Photoshop 版本检测与字体安装辅助脚本。
+用户可以直接指定目标字体；未指定时，AI 会根据原文字的笔画粗细、字面宽窄、结构与重心、圆角或尖角、书写节奏及整体画面气质，从随包字体中选择字形相近的字体，也可以按主标题、副标题、正文和数字等文字角色组合使用。标准交付包括最终 PNG 预览，以及带 Photoshop 原生可编辑文字层的 PSD。精简包随附 21 款常用字魂字体，并提供 Photoshop 版本检测与确认式字体安装脚本。
 
 ## 效果示例
 
@@ -46,7 +46,7 @@
 
 这些示例用于呈现字体应用前后的视觉差异，个别输出还包含轻微排版、日期格式或品牌信息调整，不作为“逐像素仅替换字体”的严格验证样本。正式任务仍以用户指定范围为准：默认保持原文案、位置、字号比例、颜色、字效和非目标内容不变，并经过旧字清理、Photoshop 原生文字层重建及字体回退验证。
 
-示例中的字魂白鸽天行体、字魂檀宋、字魂清润书体和字魂公路体不在当前 21 款精简字体包内；复现这些效果时，需要用户另外提供具有合法授权的字体文件。字魂荧智已包含在随包字体中。
+示例中的字魂白鸽天行体、字魂檀宋、字魂清润书体和字魂公路体不在当前 21 款精简字体包内；复现这些效果时，需要用户另外提供字体文件。字魂荧智已包含在随包字体中。
 
 ## 能做什么
 
@@ -150,28 +150,26 @@ bash scripts/detect-environment-macos.sh --json \
 
 ## 安装随包字体
 
-字体安装会修改当前用户字体目录，不能静默执行。Skill 会先询问：
+字体安装会修改操作系统字体目录，不能静默执行。Skill 会先询问：
 
 > 确认已拥有这些字体的合法使用授权，并允许安装全部 21 款到当前用户吗？
 
-只有用户明确同意后才能继续。
+只有用户明确同意后才能继续。系统级安装还必须明确指定并具备管理员权限。
 
-Windows 预览与安装：
+Windows 预览与当前用户安装：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts\install-bundled-fonts.ps1 -WhatIf
-```
-
-获得用户同意后，一键安装全部随包字体：
-
-```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts\install-bundled-fonts.ps1 `
-  -ConfirmAuthorizedUse
+  -ConfirmAuthorizedUse -CurrentUser
 ```
 
-脚本默认安装到当前 Windows 用户，不需要管理员权限；已登记字体会自动跳过。没有 `-ConfirmAuthorizedUse` 时脚本会拒绝实际安装。
-
-安装结果会列出 `installed`、`already_installed` 和 `failed`，并通知 Windows 刷新字体。安装后仍要关闭并重新启动 Photoshop，再通过 Photoshop report 检查 `actualFont`，不能仅凭安装成功判断字体已经生效。
+- 默认安装到 `%LOCALAPPDATA%\Microsoft\Windows\Fonts` 并写 HKCU，不需要管理员权限。
+- 只有用户明确要求系统级安装时才添加 `-SystemWide`；该模式写入 `C:\Windows\Fonts` 和 HKLM，需要管理员权限。
+- 没有 `-ConfirmAuthorizedUse` 时脚本拒绝实际安装；`-Force` 强制覆盖。
+- 只有"文件存在**且**注册表项存在"才算已安装，脚本会补齐只拷文件却没注册的字体。
+- 需要预览安装清单时使用 `-WhatIf`。
+- 安装结果输出 `scope`、`installed`、`already_installed`、`failed` 等字段；安装后重启 Photoshop，并以测试文字层的 `actualFont` 验证没有回退。
 
 macOS 预览与安装：
 
@@ -180,9 +178,11 @@ bash scripts/install-bundled-fonts-macos.sh --dry-run
 bash scripts/install-bundled-fonts-macos.sh --confirm-authorized-use
 ```
 
-Mac 字体安装到 `~/Library/Fonts`，不需要管理员权限；同名字体自动跳过。没有 `--confirm-authorized-use` 时脚本会拒绝实际安装。安装后退出并重新打开 Photoshop。
+- 安装到 `~/Library/Fonts`，不需要管理员权限；没有 `--confirm-authorized-use` 时拒绝实际安装，同名字体默认跳过，`--force` 强制覆盖。
+- 需要预览安装清单时使用 `--dry-run`。
+- 安装后退出并重新打开 Photoshop，再验证字体实际名称。
 
-Codex 在沙箱中运行时，安装命令必须经过用户批准并在真实用户环境执行；写入沙箱映射目录不算完成安装。
+受限环境中写入真实字体目录可能仍需环境放行；沙箱映射目录不算安装成功。若字体在 Photoshop 中仍回退到默认黑体，核验注册表与字体列表，做法见 `references/photoshop-automation-troubleshooting.md`。
 
 ## 使用方法
 
@@ -258,7 +258,27 @@ Codex 在沙箱中运行时，安装命令必须经过用户批准并在真实�
 | 手写、书写节奏与个性 | 字魂海马体、字魂夏日诗歌体、字魂龙吟手书、字魂国潮手书 |
 | 宋体骨架与人文阅读感 | 字魂阅宋 |
 
-用户指定的字体不在随包清单中时，可以使用系统中已安装的字体或用户另外提供的合法字体文件，但仍需确认 Photoshop 实际 font name。
+用户指定的字体不在随包清单中时，可以使用系统中已安装的字体或用户另外提供的字体文件，但仍需确认 Photoshop 实际 font name。
+
+## Photoshop 专业图层结构
+
+- 一个语义文字块默认只建立一个原生文字层，不把 OCR 逐字结果直接做成一字一层。
+- 文字图层直接用文案命名，例如文案“寻找”的图层名就是 `寻找`。
+- 图层名默认最长 20 个字符，超长用 `…` 截断；同名层追加 `-02`、`-03`。
+- 连续竖排中文使用一个竖排文本框；多列竖排按列拆分，不按字符拆分。
+- 只有字符需要独立颜色、旋转、路径排列、主体遮挡或不同字效时才允许拆层，并记录拆分原因。
+- 主标题、副标题、正文、装饰文字和效果层按角色分组；简单海报不创建无意义的空组或单层嵌套组。
+
+布局整理命令：
+
+```bash
+python scripts/prepare_photoshop_layers.py \
+  --layout layout.json \
+  --out layout.photoshop.json \
+  --audit-out layer-audit.json
+```
+
+完整规则见 `references/photoshop-layer-architecture.md`。
 
 ## Photoshop 版本适配
 
@@ -285,7 +305,7 @@ bash scripts/run-photoshop-smoke-test-macos.sh
 
 ### Photoshop 找不到随包字体
 
-确认字体已安装到当前用户字体目录。Windows 使用 `%LOCALAPPDATA%\Microsoft\Windows\Fonts`，Mac 使用 `~/Library/Fonts`。关闭并重新启动 Photoshop，再创建测试文字层读取 `layer.textItem.font`。
+核验字体是否已注册（Windows 检查 `C:\Windows\Fonts` 与 HKLM/HKCU 注册表，Mac 检查 `~/Library/Fonts`）。关闭并重新启动 Photoshop，再创建测试文字层读取 `layer.textItem.font`。若字体文件存在但 Photoshop 仍不认，按 `references/photoshop-automation-troubleshooting.md` 第 3 节补齐系统级注册。
 
 ### PSD 中的文字变成普通黑体
 
@@ -298,6 +318,17 @@ bash scripts/run-photoshop-smoke-test-macos.sh
 ### 只有 PNG，没有可编辑 PSD
 
 检查 Photoshop 是否安装并通过环境检测。没有 Photoshop 时，PNG 只能作为临时输出。
+
+### Photoshop 存在但脚本不执行
+
+如果 Photoshop 进程 `MainWindowHandle = 0`、转发的 JSX 不执行，不要判定"受环境限制无法完成"，也不要把脚本交给用户自己运行。用 `explorer.exe` 启动 Photoshop 使窗口挂到交互桌面，再命令行转发 JSX：
+
+```powershell
+Start-Process -FilePath "explorer.exe" -ArgumentList "`"$psExe`""
+& $psExe "$jsxPath"
+```
+
+受限环境中 COM / cscript / Add-Type / rundll32 可能被拦截，可改用 explorer 启动转发和 Python `ctypes` 广播字体变更。详见 `references/photoshop-automation-troubleshooting.md`。
 
 ### Photoshop 安装在自定义目录
 
@@ -316,6 +347,9 @@ font-image-text-replace-01/
 |       |-- font-manifest.json
 |       `-- 21 font files
 |-- references/
+|   |-- photoshop-layer-architecture.md
+|   |-- photoshop-automation-troubleshooting.md
+|   `-- ...
 `-- scripts/
     |-- detect-environment.ps1
     |-- detect-environment-macos.sh
@@ -323,10 +357,11 @@ font-image-text-replace-01/
     |-- install-bundled-fonts-macos.sh
     |-- run-photoshop-smoke-test-macos.sh
     |-- photoshop-smoke-test.jsx
+    |-- prepare_photoshop_layers.py
     |-- render_text_replacement.py
     `-- validate_text_replacement.py
 ```
 
 ## 授权说明
 
-随包字体属于商业字体资产。打包不等于授予字体授权，使用者和接收者必须拥有符合实际用途及分发范围的授权。未经许可，不要将该 ZIP、字体文件或解压后的字体目录发布到公开仓库、公共下载页面或第三方市场。
+随包字体版权归字魂所有。公开仓库仅用于 Skill 的安装、测试与演示，不等同于向第三方授予无条件商用许可；实际使用范围以字魂正式授权协议为准。安装脚本在执行真实安装前会要求确认字体来源与安装范围。
