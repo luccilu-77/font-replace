@@ -11,6 +11,10 @@ from pathlib import Path
 
 KNOWN_ALIASES = {
     "zihun-guochaoshoushu": ["zihun43hao-guochaoshoushu-Regular"],
+    "zihun-zhengkuchaojihei": [
+        "zihun143hao-zhengkuchaojihei-Heavy",
+        "zihun143hao-zhengkuchaojihei-Regular",
+    ],
 }
 
 

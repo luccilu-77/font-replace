@@ -345,7 +345,9 @@
         ]
       },
       "photoshop_candidates": [
-        "zihun143-zhengkuchaojihei"
+        "zihun143-zhengkuchaojihei",
+        "zihun143hao-zhengkuchaojihei-Heavy",
+        "zihun143hao-zhengkuchaojihei-Regular"
       ],
       "lock_rule": "Use the first candidate that appears in Photoshop and confirm actualFont equals it."
     },
